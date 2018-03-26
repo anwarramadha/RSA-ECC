@@ -63,15 +63,13 @@ public class ECC
 		Point p = new Point();
 		Random rand = new Random();
 
-		BigInteger x = new BigInteger(bitLen, rand);
+		BigInteger x = BigInteger.ZERO;
 
-		while (pointList.size() < 10){
+		while (x.compareTo(mod) < 0){
 			p.setX(x);
 			BigInteger ySquare = p.getX().pow(3).add(a.multiply(p.getX())).add(b);
 			BigInteger yRootSquare = sqrt(ySquare);
 
-			// System.out.println(ySquare.pow(2));
-			// System.out.println(p.getX().pow(3).add(a.multiply(p.getX())).add(b));
 			if (yRootSquare.pow(2).compareTo(ySquare) == 0) {
 				p.setY(yRootSquare.mod(mod));
 				points[0] = p;
@@ -83,7 +81,21 @@ public class ECC
 				pointList.add(points);
 				System.out.println("X: "+p.getX()+" Y: "+p.getY());
 			}
-			
+			else {
+				BigInteger yRootSquareWithMod = sqrt(ySquare.mod(mod));
+				if (yRootSquareWithMod.pow(2).compareTo(ySquare.mod(mod)) == 0) {
+					p.setY(yRootSquareWithMod.mod(mod));
+					points[0] = p;
+
+					System.out.println("X: "+p.getX()+" Y: "+p.getY());
+					p.setY(yRootSquareWithMod.negate().mod(mod));
+					points[1] = p;
+
+					pointList.add(points);
+					System.out.println("X: "+p.getX()+" Y: "+p.getY());
+				}
+			}
+
 			x = x.add(BigInteger.ONE);
 			// i++;
 		}
@@ -121,22 +133,30 @@ public class ECC
 		return r;
 	} 
 
+	public void createPrivateKey() {
+
+	}
+
+	public void createPublicKey() {
+		
+	}
+
 	public static void main(String [] args) {
 		ECC e = new ECC();
 		e.generateEquation();
-		// e.createGaloisField();
+		e.createGaloisField();
 		// if (ECC.isSqrt(BigInteger.valueOf(16), BigInteger.ONE.shiftLeft(BigInteger.valueOf(16).bitLength() / 2))) System.out.println("not ");
 		// System.out.println(e.sqrt(BigInteger.valueOf(15)));
-		Point p = new Point();
-		Point q = new Point();
-		p.setX(BigInteger.valueOf(2));
-		p.setY(BigInteger.valueOf(4));
-		q.setX(BigInteger.valueOf(5));
-		q.setY(BigInteger.valueOf(9));
-		Point r = new Point();
+		// Point p = new Point();
+		// Point q = new Point();
+		// p.setX(BigInteger.valueOf(2));
+		// p.setY(BigInteger.valueOf(4));
+		// q.setX(BigInteger.valueOf(5));
+		// q.setY(BigInteger.valueOf(9));
+		// Point r = new Point();
+		// // System.out.println("X: "+r.getX()+" Y: "+r.getY());
+		// r = e.add(q, p);
 		// System.out.println("X: "+r.getX()+" Y: "+r.getY());
-		r = e.add(q, p);
-		System.out.println("X: "+r.getX()+" Y: "+r.getY());
 
 	}
 }
