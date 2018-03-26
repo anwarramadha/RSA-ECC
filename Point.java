@@ -9,6 +9,11 @@ public class Point
 		y = BigInteger.valueOf(0);
 	}
 
+	public Point(BigInteger x, BigInteger y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	public void setX(BigInteger x) {
 		this.x = x;
 	}
